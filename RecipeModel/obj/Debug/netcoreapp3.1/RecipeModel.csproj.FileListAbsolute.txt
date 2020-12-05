@@ -1,0 +1,9 @@
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\bin\Debug\netcoreapp3.1\RecipeModel.deps.json
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\bin\Debug\netcoreapp3.1\RecipeModel.runtimeconfig.json
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\bin\Debug\netcoreapp3.1\RecipeModel.runtimeconfig.dev.json
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\bin\Debug\netcoreapp3.1\RecipeModel.dll
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\bin\Debug\netcoreapp3.1\RecipeModel.pdb
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.AssemblyInfoInputs.cache
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.AssemblyInfo.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.dll
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.pdb

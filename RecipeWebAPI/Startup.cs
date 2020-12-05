@@ -10,6 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RecipeModel.Models;
+using RecipeModel.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace RecipeWebAPI
 {
@@ -26,6 +31,8 @@ namespace RecipeWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<RecipeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RecipeContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
