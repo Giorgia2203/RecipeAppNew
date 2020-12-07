@@ -7,12 +7,16 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RecipeModel.Data;
 using RecipeModel.Models;
+using System.Net.Http;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace RecipeMVC.Controllers
 {
     public class IngredientsController : Controller
     {
         private readonly RecipeContext _context;
+        private string _baseUrl = "http://localhost:50541/api/Ingredients";
 
         public IngredientsController(RecipeContext context)
         {
@@ -22,25 +26,37 @@ namespace RecipeMVC.Controllers
         // GET: Ingredients
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Ingredients.ToListAsync());
+            var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var ingredients = JsonConvert.DeserializeObject<List<Ingredient>>(await response.Content.ReadAsStringAsync());
+
+                return View(ingredients);
+            }
+
+            return NotFound();
         }
 
         // GET: Ingredients/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
             if (id == null)
             {
-                return NotFound();
+                return new BadRequestResult();
             }
 
-            var ingredient = await _context.Ingredients
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ingredient == null)
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                var ingredients = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
+                return View(ingredients);
             }
 
-            return View(ingredient);
+            return NotFound();
         }
 
         // GET: Ingredients/Create
@@ -56,12 +72,26 @@ namespace RecipeMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Ingredient ingredient)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(ingredient);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return View(ingredient);
             }
+
+            try
+            {
+                var client = new HttpClient();
+                string json = JsonConvert.SerializeObject(ingredient);
+                var response = await client.PostAsync(_baseUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Unable to create record:{ex.Message}");
+            }
+
             return View(ingredient);
         }
 
@@ -70,15 +100,19 @@ namespace RecipeMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new BadRequestResult();
             }
 
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            if (ingredient == null)
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                var ingredient = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
+                return View(ingredient);
             }
-            return View(ingredient);
+
+            return new NotFoundResult();
         }
 
         // POST: Ingredients/Edit/5
@@ -88,31 +122,16 @@ namespace RecipeMVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Ingredient ingredient)
         {
-            if (id != ingredient.Id)
+            if (!ModelState.IsValid) return View(ingredient);
+            var client = new HttpClient();
+            string json = JsonConvert.SerializeObject(ingredient);
+            var response = await client.PutAsync($"{_baseUrl}/{ingredient.Id}", new StringContent(json, Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                return RedirectToAction("Index");
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(ingredient);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!IngredientExists(ingredient.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
             return View(ingredient);
         }
 
@@ -121,33 +140,43 @@ namespace RecipeMVC.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return new BadRequestResult();
             }
 
-            var ingredient = await _context.Ingredients
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (ingredient == null)
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+
+            if (response.IsSuccessStatusCode)
             {
-                return NotFound();
+                var ingredient = JsonConvert.DeserializeObject<Ingredient>(await response.Content.ReadAsStringAsync());
+                return View(ingredient);
             }
 
-            return View(ingredient);
+            return new NotFoundResult();
         }
 
         // POST: Ingredients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed([Bind("Id")] Ingredient ingredient)
         {
-            var ingredient = await _context.Ingredients.FindAsync(id);
-            _context.Ingredients.Remove(ingredient);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            try
+            {
+                var client = new HttpClient();
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{ingredient.Id}")
+                {
+                    Content = new StringContent(JsonConvert.SerializeObject(ingredient), Encoding.UTF8, "application/json")
+                };
 
-        private bool IngredientExists(int id)
-        {
-            return _context.Ingredients.Any(e => e.Id == id);
+                var response = await client.SendAsync(request);
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, $"Unable to delete record:{ex.Message}");
+            }
+
+            return View(ingredient);
         }
     }
 }
