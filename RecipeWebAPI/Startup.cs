@@ -32,7 +32,9 @@ namespace RecipeWebAPI
         {
             services.AddControllers();
             services.AddDbContext<RecipeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RecipeContext>();
+            services.AddIdentityCore<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RecipeContext>().AddDefaultTokenProviders();
+            services.AddRazorPages();
+            //services.AddScoped<SignInManager<AppUser>,SignInManager<AppUser>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -7,3 +7,4 @@ D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.AssemblyInfo.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.dll
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.pdb
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeModel\obj\Debug\netcoreapp3.1\RecipeModel.csprojAssemblyReference.cache
