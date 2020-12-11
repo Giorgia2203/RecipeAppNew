@@ -260,3 +260,8 @@ D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\D
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\FavouriteRecipes\Details.cshtml.g.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\FavouriteRecipes\Edit.cshtml.g.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\FavouriteRecipes\Index.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\RecipeIngredients\Create.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\RecipeIngredients\Delete.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\RecipeIngredients\Details.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\RecipeIngredients\Edit.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\RecipeIngredients\Index.cshtml.g.cs
