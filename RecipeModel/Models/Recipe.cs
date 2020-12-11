@@ -7,8 +7,9 @@ namespace RecipeModel.Models
     public class Recipe
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public string AppUserId { get; set; }
         public string Name { get; set; }
+        public string Cuisine { get; set; }
         public string Description { get; set; }
         public string Instructions { get; set; }
         public int PreparationTime { get; set; }

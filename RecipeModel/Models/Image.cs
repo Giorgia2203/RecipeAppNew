@@ -12,7 +12,7 @@ namespace RecipeModel.Models
 
         public int RecipeId { get; set; }
 
-        public string UserId { get; set; }
+        public string AppUserId { get; set; }
 
         public string Description { get; set; }
         public string Filepath { get; set; }

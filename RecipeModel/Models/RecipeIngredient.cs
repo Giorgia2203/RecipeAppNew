@@ -9,9 +9,8 @@ namespace RecipeModel.Models
     public class RecipeIngredient
     {
         public int RecipeId { get; set; }
-
         public int IngredientId { get; set; }
-
+        public int BrandId { get; set; }
         public int Amount { get; set; }
         public string Measurement { get; set; }
 

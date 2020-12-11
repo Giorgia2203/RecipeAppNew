@@ -31,6 +31,7 @@ namespace RecipeMVC
             services.AddDbContext<RecipeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RecipeContext>().AddDefaultTokenProviders();
             services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
             //services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
 
         }
@@ -41,6 +42,7 @@ namespace RecipeMVC
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseBrowserLink();
             }
             else
             {
