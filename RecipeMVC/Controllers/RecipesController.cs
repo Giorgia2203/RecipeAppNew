@@ -178,5 +178,59 @@ namespace RecipeMVC.Controllers
 
             return View(recipe);
         }
+
+        public async Task<IActionResult> GetDessert()
+        {
+            
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
+
+                var recipe = recipes.Where(x => x.Category.Equals("Desert"));
+
+                return View(recipe);
+            }
+
+            return new NotFoundResult();
+        }
+
+        public async Task<IActionResult> GetMainDish()
+        {
+
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
+
+                var recipe = recipes.Where(x => x.Category.Equals("Fel principal"));
+
+                return View(recipe);
+            }
+
+            return new NotFoundResult();
+        }
+
+        public async Task<IActionResult> GetSoup()
+        {
+
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
+
+                var recipe = recipes.Where(x => x.Category.Equals("Supă"));
+
+                return View(recipe);
+            }
+
+            return new NotFoundResult();
+        }
     }
 }

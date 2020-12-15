@@ -9,6 +9,14 @@
     <Compile Remove="Migrations\20201209132703_ChangeUserID.Designer.cs" />
     <Compile Remove="Migrations\20201211125538_AddBrandId.cs" />
     <Compile Remove="Migrations\20201211125538_AddBrandId.Designer.cs" />
+    <Compile Remove="Migrations\20201213184222_RecipeUpdate.cs" />
+    <Compile Remove="Migrations\20201213184222_RecipeUpdate.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Images\pictrue.png" />
+    <None Include="wwwroot\Images\pictrue1.png" />
+    <None Include="wwwroot\Images\picture2.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4534,6 +4534,7 @@ input[type="button"].btn-block {
     padding: 0.5rem 1rem;
 }
 
+
     .navbar .container,
     .navbar .container-fluid, .navbar .container-sm, .navbar .container-md, .navbar .container-lg, .navbar .container-xl {
         display: -ms-flexbox;
@@ -4542,8 +4543,8 @@ input[type="button"].btn-block {
         flex-wrap: wrap;
         -ms-flex-align: center;
         align-items: center;
-        -ms-flex-pack: justify;
-        justify-content: space-between;
+        -ms-flex-pack:justify;
+        justify-content:space-between;
     }
 
 .navbar-brand {

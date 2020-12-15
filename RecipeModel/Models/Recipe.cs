@@ -18,7 +18,7 @@ namespace RecipeModel.Models
         public string Category { get; set; }
         public DateTime CreationDate { get; set; }
 
-        public AppUser User { get; set; }
+        public AppUser AppUser { get; set; }
         public ICollection<Review> Review { get; set; }
         public ICollection<FavouriteRecipe> FaveRecipe { get; set; }
         public ICollection<Image> Image { get; set; }

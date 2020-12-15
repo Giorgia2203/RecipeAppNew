@@ -530,3 +530,6 @@ D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\bin\D
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\bin\Debug\netcoreapp3.1\Microsoft.VisualStudio.Web.BrowserLink.dll
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\RecipeMVC.MvcApplicationPartsAssemblyInfo.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\RecipeMVC.MvcApplicationPartsAssemblyInfo.cache
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Recipes\GetDessert.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Recipes\GetMainDish.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Recipes\GetSoup.cshtml.g.cs
