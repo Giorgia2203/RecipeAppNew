@@ -44,9 +44,9 @@ namespace RecipeMVC.Controllers
         // GET: Images/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            var image = await _context.Images
+           /*var image = await _context.Images
                 .Include(i => i.Recipe)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == id);*/
             if (id == null)
             {
                 return new BadRequestResult();
@@ -67,7 +67,7 @@ namespace RecipeMVC.Controllers
         // GET: Images/Create
         public IActionResult Create()
         {
-            ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id");
+            ViewData["ImageId"] = new SelectList(_context.Images, "Id", "Id");
             return View();
         }
 

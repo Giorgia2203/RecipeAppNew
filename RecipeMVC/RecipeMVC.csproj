@@ -14,9 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\Images\pesto.jpg" />
     <None Include="wwwroot\Images\pictrue.png" />
     <None Include="wwwroot\Images\pictrue1.png" />
     <None Include="wwwroot\Images\picture2.png" />
+    <None Include="wwwroot\Images\potatoPepper.jpg" />
+    <None Include="wwwroot\Images\strawberryMascarpone.jpg" />
   </ItemGroup>
 
   <ItemGroup>

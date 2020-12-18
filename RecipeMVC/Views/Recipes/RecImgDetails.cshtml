@@ -1,0 +1,57 @@
+﻿@model RecipeModel.ViewModel.RecipeDetails
+@{
+    ViewData["Title"] = "RecImgDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div>
+        </br>
+        <!--<img src="@Model.Image.Filepath"/>-->
+        <h3>@Html.DisplayFor(model => model.Recipe.Name)</h3>
+        <hr />
+        <div class="row">
+            <div class="col">
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/mixer.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Preparation time:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.PreparationTime)'</p>
+                </div>
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/oven.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Cook time:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.BakingTime)'</p>
+                </div>
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/cutlery.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Serving size:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.ServingSize)</p>
+                </div>
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/world.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Cuisine:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.Cuisine)</p>
+                </div>
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/serve.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Course:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.Category)</p>
+                </div>
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/cooking.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Author:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.AppUser.Name)</p>
+                </div>
+                <div class="row">
+                    <img width="35" height="35" src="~/Images/schedule.png" style="margin-left:10px" />
+                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Creation date:</p>
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.CreationDate)</p> <!--rezolva data aia sa fie fara ora-->
+                </div>
+            </div>
+            <div class="col">
+                <img src="~/Images/strawberryMascarpone.jpg" width="600" height="400" />
+            </div>
+        </div>
+        <h6>Created by @Model.AppUser.Name</h6>
+    </div>
+
+

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using RecipeModel.Data;
 using RecipeModel.Models;
+using RecipeModel.ViewModel;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
@@ -22,6 +23,37 @@ namespace RecipeMVC.Controllers
         public RecipesController(RecipeContext context)
         {
             _context = context;
+        }
+
+        public async Task<IActionResult> IndexImage()
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
+                var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+
+                var listRecImg = new List<RecipeImage>();
+
+                foreach(var recipe in recipes)
+                {
+                    var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
+
+                    RecipeImage recipeImage = new RecipeImage
+                    {
+                        Recipe = recipe,
+                        Image = image
+                    };
+
+                    listRecImg.Add(recipeImage);
+                }
+
+                return View(listRecImg);
+            }
+
+            return NotFound();
         }
 
         // GET: Recipes
@@ -231,6 +263,37 @@ namespace RecipeMVC.Controllers
             }
 
             return new NotFoundResult();
+        }
+
+        public async Task<IActionResult> RecImgDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipe = JsonConvert.DeserializeObject<Recipe>(await response.Content.ReadAsStringAsync());
+                var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+
+                var image = images.Where(x => x.RecipeId == id).ToList().First();
+                var user = _context.AppUsers.Where(x => x.Id == recipe.AppUserId).ToList().First();
+
+                RecipeDetails recImgDet = new RecipeDetails
+                {
+                    Recipe = recipe,
+                    Image = image,
+                    AppUser = user
+                };
+
+                return View(recImgDet);
+            }
+
+            return NotFound();
         }
     }
 }
