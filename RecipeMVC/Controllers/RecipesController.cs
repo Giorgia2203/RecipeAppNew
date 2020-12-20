@@ -279,15 +279,30 @@ namespace RecipeMVC.Controllers
             {
                 var recipe = JsonConvert.DeserializeObject<Recipe>(await response.Content.ReadAsStringAsync());
                 var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+                var ingredients = JsonConvert.DeserializeObject<List<Ingredient>>(await (await client.GetAsync("http://localhost:50541/api/Ingredients")).Content.ReadAsStringAsync());
+                var brands = JsonConvert.DeserializeObject<List<Brand>>(await (await client.GetAsync("http://localhost:50541/api/Brands")).Content.ReadAsStringAsync());
+                var recipeIngredients = JsonConvert.DeserializeObject<List<RecipeIngredient>>(await (await client.GetAsync("http://localhost:50541/api/RecipeIngredients")).Content.ReadAsStringAsync());
 
                 var image = images.Where(x => x.RecipeId == id).ToList().First();
                 var user = _context.AppUsers.Where(x => x.Id == recipe.AppUserId).ToList().First();
+                var recipeIngredient = recipeIngredients.Where(x => x.RecipeId == id).ToList();
+
+                var listIngredient = new List<Ingredient>();
+                var listBrand = new List<Brand>();
+
+                foreach (var item in recipeIngredient)
+                {
+                    item.Ingredient = ingredients.Where(x => x.Id == item.IngredientId).ToList().First();
+                    item.Brand = brands.Where(x => x.Id == item.BrandId).ToList().First();
+                }
 
                 RecipeDetails recImgDet = new RecipeDetails
                 {
                     Recipe = recipe,
                     Image = image,
-                    AppUser = user
+                    AppUser = user,
+                    RecipeIngredients = recipeIngredient,
+                    CreationDate = recipe.CreationDate.ToString("d")
                 };
 
                 return View(recImgDet);

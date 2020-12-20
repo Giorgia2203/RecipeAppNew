@@ -10,8 +10,7 @@ namespace RecipeModel.ViewModel
         public Recipe Recipe { get; set; }
         public Image Image { get; set; }
         public AppUser AppUser { get; set; }
-        public RecipeIngredient RecipeIngredient { get; set; }
-        public Ingredient Ingredient { get; set; }
-        public Brand Brand { get; set; }
+        public List<RecipeIngredient> RecipeIngredients { get; set; }
+        public string CreationDate { get; set; }
     }
 }

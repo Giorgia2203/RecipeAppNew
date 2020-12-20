@@ -16,5 +16,6 @@ namespace RecipeModel.Models
 
         public Recipe Recipe { get; set; }
         public Ingredient Ingredient { get; set; }
+        public Brand Brand { get; set; }
     }
 }

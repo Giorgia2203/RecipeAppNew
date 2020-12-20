@@ -5,7 +5,7 @@
 }
 
     <div>
-        </br>
+        <br/>
         <!--<img src="@Model.Image.Filepath"/>-->
         <h3>@Html.DisplayFor(model => model.Recipe.Name)</h3>
         <hr />
@@ -44,14 +44,21 @@
                 <div class="row">
                     <img width="35" height="35" src="~/Images/schedule.png" style="margin-left:10px" />
                     <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Creation date:</p>
-                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.CreationDate)</p> <!--rezolva data aia sa fie fara ora-->
+                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.CreationDate)</p>
                 </div>
             </div>
             <div class="col">
-                <img src="~/Images/strawberryMascarpone.jpg" width="600" height="400" />
+                <img src="/@Model.Image.Filepath" width="600" height="400" />
             </div>
         </div>
-        <h6>Created by @Model.AppUser.Name</h6>
+        <hr />
+        <p style="font-weight:bold">Ingredients</p>
+        <ul>
+            @foreach (var item in Model.RecipeIngredients)
+             {
+            <li>@Html.DisplayFor(model => item.Amount) @Html.DisplayFor(model => item.Measurement) @Html.DisplayFor(model => item.Ingredient.Name) @Html.DisplayFor(model => item.Brand.Name)  </li>
+             }
+        </ul>
     </div>
 
 
