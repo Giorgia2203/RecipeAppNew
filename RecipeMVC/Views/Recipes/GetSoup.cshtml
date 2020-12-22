@@ -1,70 +1,21 @@
-﻿@model IEnumerable<RecipeModel.Models.Recipe>
+﻿@model IEnumerable<RecipeModel.ViewModel.RecipeImage>
 @{
     ViewData["Title"] = "GetSoup";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>GetSoup</h1>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Instructions)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PreparationTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BakingTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ServingSize)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Instructions)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PreparationTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BakingTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ServingSize)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationDate)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<br />
 
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-3">
+            <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
+                <img class="img-thumbnail" src="/@item.Image.Filepath" style="margin-bottom:10px" />
+                <h5>@Html.DisplayFor(modelItem => item.Recipe.Name)</h5>
+            </a>
+            <p>@Html.DisplayFor(modelItem => item.Recipe.Description)</p>
+        </div>
+
+    }
+</div>

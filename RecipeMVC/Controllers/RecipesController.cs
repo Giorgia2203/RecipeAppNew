@@ -11,7 +11,7 @@ using RecipeModel.ViewModel;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
-
+using Microsoft.AspNetCore.Identity;
 
 namespace RecipeMVC.Controllers
 {
@@ -102,7 +102,7 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Instructions,PreparationTime,BakingTime,ServingSize,Category,CreationDate")] Recipe recipe)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Instructions,PreparationTime,BakingTime,ServingSize,Category,CreationDate,AppUserId,Cuisine")] Recipe recipe)
         {
             if (!ModelState.IsValid)
             {
@@ -221,9 +221,26 @@ namespace RecipeMVC.Controllers
             {
                 var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
 
-                var recipe = recipes.Where(x => x.Category.Equals("Desert"));
+                var recipeDessert = recipes.Where(x => x.Category.Equals("Desert"));
 
-                return View(recipe);
+                var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+
+                var listRecImg = new List<RecipeImage>();
+
+                foreach (var recipe in recipeDessert)
+                {
+                    var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
+
+                    RecipeImage recipeImage = new RecipeImage
+                    {
+                        Recipe = recipe,
+                        Image = image
+                    };
+
+                    listRecImg.Add(recipeImage);
+                }
+
+                return View(listRecImg);
             }
 
             return new NotFoundResult();
@@ -239,9 +256,26 @@ namespace RecipeMVC.Controllers
             {
                 var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
 
-                var recipe = recipes.Where(x => x.Category.Equals("Fel principal"));
+                var recipeMainDish = recipes.Where(x => x.Category.Equals("Fel principal"));
 
-                return View(recipe);
+                var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+
+                var listRecImg = new List<RecipeImage>();
+
+                foreach (var recipe in recipeMainDish)
+                {
+                    var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
+
+                    RecipeImage recipeImage = new RecipeImage
+                    {
+                        Recipe = recipe,
+                        Image = image
+                    };
+
+                    listRecImg.Add(recipeImage);
+                }
+
+                return View(listRecImg);
             }
 
             return new NotFoundResult();
@@ -257,9 +291,26 @@ namespace RecipeMVC.Controllers
             {
                 var recipes = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
 
-                var recipe = recipes.Where(x => x.Category.Equals("Supă"));
+                var recipeSoup = recipes.Where(x => x.Category.Equals("Supă"));
 
-                return View(recipe);
+                var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+
+                var listRecImg = new List<RecipeImage>();
+
+                foreach (var recipe in recipeSoup)
+                {
+                    var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
+
+                    RecipeImage recipeImage = new RecipeImage
+                    {
+                        Recipe = recipe,
+                        Image = image
+                    };
+
+                    listRecImg.Add(recipeImage);
+                }
+
+                return View(listRecImg);
             }
 
             return new NotFoundResult();
