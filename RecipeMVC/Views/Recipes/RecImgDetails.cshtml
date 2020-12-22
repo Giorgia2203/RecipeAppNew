@@ -3,12 +3,61 @@
     ViewData["Title"] = "RecImgDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+    <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/js/requests.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        getRatingForUserAndRecipe(@Model.Recipe.Id, '@Model.AppUser.Id');
+    </script>
 
+    <style>
+        .rating {
+            unicode-bidi: bidi-override;
+            direction: rtl;
+        }
+
+        .rating > span {
+            display: inline-block;
+            position: relative;
+            font-size: 24px;
+            color: #9dd1c2;
+        }
+
+        .rating > span:hover:before,
+        .rating > span:hover ~ span:before {
+            color: #f3969a;
+        }
+
+        .favourite{
+            position: relative;
+            font-size:40px;
+            color: #808080;
+            float:right;
+        }
+
+        .favourite:hover
+        {
+            color: #e23232;
+        }
+    </style>
+</head>
+<body>
     <div>
-        <br/>
-        <!--<img src="@Model.Image.Filepath"/>-->
-        <h3>@Html.DisplayFor(model => model.Recipe.Name)</h3>
-        <hr />
+        <br />
+        <div class="row">
+            <div class="col">
+                <h3>@Html.DisplayFor(model => model.Recipe.Name)</h3>
+            </div>
+            <div class="col" style="justify-content:right">
+                <span class="fa fa-heart favourite"></span>
+            </div>
+        </div>
+        <hr/>
         <div class="row">
             <div class="col">
                 <div class="row">
@@ -17,9 +66,10 @@
                     <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.PreparationTime)'</p>
                 </div>
                 <div class="row">
-                    <img width="35" height="35" src="~/Images/oven.png" style="margin-left:10px" />
-                    <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Cook time:</p>
-                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.Recipe.BakingTime)'</p>
+                    <img width="35" height="35" src="~/Images/oven.png" style="margin-left: 10px " />
+                    <p class="font-weight-bold" style=" padding: 4px 0px 4px 4px">Cook time:</p>
+                    <p style="        padding: 4px 0px 4px 4px
+">@Html.DisplayFor(model => model.Recipe.BakingTime)'</p>
                 </div>
                 <div class="row">
                     <img width="35" height="35" src="~/Images/cutlery.png" style="margin-left:10px" />
@@ -55,10 +105,21 @@
         <p style="font-weight:bold">Ingredients</p>
         <ul>
             @foreach (var item in Model.RecipeIngredients)
-             {
-            <li>@Html.DisplayFor(model => item.Amount) @Html.DisplayFor(model => item.Measurement) @Html.DisplayFor(model => item.Ingredient.Name) @Html.DisplayFor(model => item.Brand.Name)  </li>
-             }
+            {
+                <li>@Html.DisplayFor(model => item.Amount) @Html.DisplayFor(model => item.Measurement) @Html.DisplayFor(model => item.Ingredient.Name) @Html.DisplayFor(model => item.Brand.Name)  </li>
+            }
         </ul>
+
+        <div class="rating">
+            <span id="star-5" class="fa fa-star" onclick="addRating(event)"></span>
+            <span id="star-4" class="fa fa-star" onclick="addRating(event)"></span>
+            <span id="star-3" class="fa fa-star" onclick="addRating(event)"></span>
+            <span id="star-2" class="fa fa-star" onclick="addRating(event)"></span>
+            <span id="star-1" class="fa fa-star" onclick="addRating(event)"></span>
+        </div>
     </div>
+
+</body>
+</html>
 
 

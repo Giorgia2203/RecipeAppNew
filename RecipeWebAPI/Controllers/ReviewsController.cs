@@ -42,6 +42,20 @@ namespace RecipeWebAPI.Controllers
             return review;
         }
 
+        // GET: api/Review/5/user-hash
+        [HttpGet("{recipeId}/{userId}")]
+        public async Task<ActionResult<Review>> GetReviewByUserIdAndRecipeId(int recipeId, string userId)
+        {
+            var review = await _context.Reviews.FirstOrDefaultAsync(r => r.RecipeId == recipeId && r.AppUserId.Equals(userId));
+
+            if (review == null)
+            {
+                return NotFound();
+            }
+
+            return review;
+        }
+
         // PUT: api/Reviews/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
