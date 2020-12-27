@@ -89,10 +89,10 @@ namespace RecipeWebAPI.Controllers
         }
 
         // DELETE: api/FavouriteRecipes/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<FavouriteRecipe>> DeleteFavouriteRecipe(int id)
+        [HttpDelete("{userId}/{recipeId}")]
+        public async Task<ActionResult<FavouriteRecipe>> DeleteFavouriteRecipe(string userId, int recipeId)
         {
-            var favouriteRecipe = await _context.FavouriteRecipes.FindAsync(id);
+            var favouriteRecipe = await _context.FavouriteRecipes.FirstOrDefaultAsync(x => x.AppUserId.Equals(userId) && x.RecipeId == recipeId);
             if (favouriteRecipe == null)
             {
                 return NotFound();

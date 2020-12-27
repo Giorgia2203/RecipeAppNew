@@ -117,11 +117,11 @@
         </ul>
 
         <div class="rating">
-            <span id="star-5" class="fa fa-star" onclick="addRating(event)"></span>
-            <span id="star-4" class="fa fa-star" onclick="addRating(event)"></span>
-            <span id="star-3" class="fa fa-star" onclick="addRating(event)"></span>
-            <span id="star-2" class="fa fa-star" onclick="addRating(event)"></span>
-            <span id="star-1" class="fa fa-star" onclick="addRating(event)"></span>
+            <span id="star-5" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
+            <span id="star-4" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
+            <span id="star-3" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
+            <span id="star-2" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
+            <span id="star-1" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
         </div>
         <div>
             <p id="average"></p>
