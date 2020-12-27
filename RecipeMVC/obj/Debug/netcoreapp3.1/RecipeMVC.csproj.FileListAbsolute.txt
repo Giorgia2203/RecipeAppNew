@@ -536,3 +536,4 @@ D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\D
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Ingredients\Index.cshtml.g.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Recipes\RecImgDetails.cshtml.g.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Recipes\GetUserRecipes.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\FavouriteRecipes\GetFaveRecipes.cshtml.g.cs
