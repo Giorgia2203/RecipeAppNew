@@ -41,18 +41,18 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: FavouriteRecipes/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? userId, int recipeId)
         {
             var favouriteRecipe = await _context.FavouriteRecipes
                 .Include(f => f.Recipe)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (id == null)
+                .FirstOrDefaultAsync(m => m.AppUserId.Equals(userId) && m.RecipeId == recipeId);
+            if (userId == null || recipeId == 0)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{userId}/{recipeId}");
             if (response.IsSuccessStatusCode)
             {
                 var faceRecipes = JsonConvert.DeserializeObject<FavouriteRecipe>(await response.Content.ReadAsStringAsync());
@@ -74,7 +74,7 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,RecipeId")] FavouriteRecipe favouriteRecipe)
+        public async Task<IActionResult> Create([Bind("UserId,RecipeId")] FavouriteRecipe favouriteRecipe)
         {
             //ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", favouriteRecipe.RecipeId);
             if (!ModelState.IsValid)
@@ -101,16 +101,16 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: FavouriteRecipes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string? userId, int? recipeId)
         {
             //ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", favouriteRecipe.RecipeId);
-            if (id == null)
+            if (String.IsNullOrEmpty(userId) || recipeId == null)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{userId}/{recipeId.Value}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -126,13 +126,13 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,RecipeId")] FavouriteRecipe favouriteRecipe)
+        public async Task<IActionResult> Edit(string userId, int recipeId, [Bind("UserId,RecipeId")] FavouriteRecipe favouriteRecipe)
         {
             //ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", favouriteRecipe.RecipeId);
             if (!ModelState.IsValid) return View(favouriteRecipe);
             var client = new HttpClient();
             string json = JsonConvert.SerializeObject(favouriteRecipe);
-            var response = await client.PutAsync($"{_baseUrl}/{favouriteRecipe.Id}", new StringContent(json, Encoding.UTF8, "application/json"));
+            var response = await client.PutAsync($"{_baseUrl}/{favouriteRecipe.AppUserId}/{favouriteRecipe.RecipeId}", new StringContent(json, Encoding.UTF8, "application/json"));
 
             if (response.IsSuccessStatusCode)
             {
@@ -143,18 +143,18 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: FavouriteRecipes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string? userId, int? recipeId)
         {
             /*var favouriteRecipe = await _context.FavouriteRecipes
                 .Include(f => f.Recipe)
                 .FirstOrDefaultAsync(m => m.Id == id);*/
-            if (id == null)
+            if (String.IsNullOrEmpty(userId) || recipeId == null)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{userId}/{recipeId.Value}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -168,12 +168,12 @@ namespace RecipeMVC.Controllers
         // POST: FavouriteRecipes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed([Bind("Id")] FavouriteRecipe favouriteRecipe)
+        public async Task<IActionResult> DeleteConfirmed([Bind("AppUserId,RecipeId")] FavouriteRecipe favouriteRecipe)
         {
             try
             {
                 var client = new HttpClient();
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{favouriteRecipe.Id}")
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{favouriteRecipe.AppUserId}/{favouriteRecipe.RecipeId}")
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(favouriteRecipe), Encoding.UTF8, "application/json")
                 };

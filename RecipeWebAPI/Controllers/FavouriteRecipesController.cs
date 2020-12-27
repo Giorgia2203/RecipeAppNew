@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,10 +30,10 @@ namespace RecipeWebAPI.Controllers
         }
 
         // GET: api/FavouriteRecipes/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<FavouriteRecipe>> GetFavouriteRecipe(int id)
+        [HttpGet("{userId}/{recipeId}")]
+        public async Task<ActionResult<FavouriteRecipe>> GetFavouriteRecipe(string userId, int recipeId)
         {
-            var favouriteRecipe = await _context.FavouriteRecipes.FindAsync(id);
+            var favouriteRecipe = await _context.FavouriteRecipes.FirstOrDefaultAsync(x => x.AppUserId.Equals(userId) && x.RecipeId == recipeId);
 
             if (favouriteRecipe == null)
             {
@@ -45,10 +46,10 @@ namespace RecipeWebAPI.Controllers
         // PUT: api/FavouriteRecipes/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutFavouriteRecipe(int id, FavouriteRecipe favouriteRecipe)
+        [HttpPut("{userId}/{recipeId}")]
+        public async Task<IActionResult> PutFavouriteRecipe(string userId,int recipeId, FavouriteRecipe favouriteRecipe)
         {
-            if (id != favouriteRecipe.Id)
+            if (userId != favouriteRecipe.AppUserId || recipeId != favouriteRecipe.RecipeId)
             {
                 return BadRequest();
             }
@@ -61,7 +62,7 @@ namespace RecipeWebAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FavouriteRecipeExists(id))
+                if (!FavouriteRecipeExists(userId, recipeId))
                 {
                     return NotFound();
                 }
@@ -78,26 +79,13 @@ namespace RecipeWebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        [EnableCors]
         public async Task<ActionResult<FavouriteRecipe>> PostFavouriteRecipe(FavouriteRecipe favouriteRecipe)
         {
             _context.FavouriteRecipes.Add(favouriteRecipe);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (FavouriteRecipeExists(favouriteRecipe.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFavouriteRecipe", new { id = favouriteRecipe.Id }, favouriteRecipe);
+            return CreatedAtAction("GetFavouriteRecipe", new { userId = favouriteRecipe.AppUserId, recipeId = favouriteRecipe.RecipeId }, favouriteRecipe);
         }
 
         // DELETE: api/FavouriteRecipes/5
@@ -116,9 +104,9 @@ namespace RecipeWebAPI.Controllers
             return favouriteRecipe;
         }
 
-        private bool FavouriteRecipeExists(int id)
+        private bool FavouriteRecipeExists(string userId, int recipeId)
         {
-            return _context.FavouriteRecipes.Any(e => e.Id == id);
+            return _context.FavouriteRecipes.Any(e => e.AppUserId.Equals(userId) && e.RecipeId == recipeId);
         }
     }
 }

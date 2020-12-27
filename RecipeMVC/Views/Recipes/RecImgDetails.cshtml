@@ -1,9 +1,14 @@
 ﻿@model RecipeModel.ViewModel.RecipeDetails
+@using Microsoft.AspNetCore.Identity
+@using RecipeModel.Models
+
+@inject UserManager<AppUser> UserManager
+
 @{
     ViewData["Title"] = "RecImgDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
@@ -12,7 +17,9 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/js/requests.js" asp-append-version="true"></script>
     <script type="text/javascript">
-        getRatingForUserAndRecipe(@Model.Recipe.Id, '@Model.AppUser.Id');
+        getRatingForUserAndRecipe(@Model.Recipe.Id, '@UserManager.GetUserId(User)');
+        getAverageRatingForRecipe(@Model.Recipe.Id);
+        getIsFavourite('@UserManager.GetUserId(User)',@Model.Recipe.Id);
     </script>
 
     <style>
@@ -33,17 +40,17 @@
             color: #f3969a;
         }
 
-        .favourite{
+        .favourite {
             position: relative;
-            font-size:40px;
+            font-size: 40px;
             color: #808080;
-            float:right;
+            float: right;
         }
 
-        .favourite:hover
-        {
+        .favourite:hover {
             color: #e23232;
         }
+
     </style>
 </head>
 <body>
@@ -54,10 +61,10 @@
                 <h3>@Html.DisplayFor(model => model.Recipe.Name)</h3>
             </div>
             <div class="col" style="justify-content:right">
-                <span class="fa fa-heart favourite"></span>
+                <span class="fa fa-heart favourite" onclick="favouriteClicked(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
             </div>
         </div>
-        <hr/>
+        <hr />
         <div class="row">
             <div class="col">
                 <div class="row">
@@ -115,6 +122,9 @@
             <span id="star-3" class="fa fa-star" onclick="addRating(event)"></span>
             <span id="star-2" class="fa fa-star" onclick="addRating(event)"></span>
             <span id="star-1" class="fa fa-star" onclick="addRating(event)"></span>
+        </div>
+        <div>
+            <p id="average"></p>
         </div>
     </div>
 

@@ -12,6 +12,7 @@ using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Principal;
 
 namespace RecipeMVC.Controllers
 {
@@ -37,7 +38,7 @@ namespace RecipeMVC.Controllers
 
                 var listRecImg = new List<RecipeImage>();
 
-                foreach(var recipe in recipes)
+                foreach (var recipe in recipes)
                 {
                     var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
 
@@ -116,7 +117,7 @@ namespace RecipeMVC.Controllers
                 var response = await client.PostAsync(_baseUrl, new StringContent(json, Encoding.UTF8, "application/json"));
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Create", "Images", new { area = "" });
                 }
             }
             catch (Exception ex)
@@ -213,7 +214,7 @@ namespace RecipeMVC.Controllers
 
         public async Task<IActionResult> GetDessert()
         {
-            
+
             var client = new HttpClient();
             var response = await client.GetAsync($"{_baseUrl}");
 
@@ -361,5 +362,40 @@ namespace RecipeMVC.Controllers
 
             return NotFound();
         }
+
+        public async Task<IActionResult> GetUserRecipes(string userId)
+        {
+            var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipesAll = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
+                var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
+
+                var recipes = recipesAll.Where(x => x.AppUserId.Equals(userId));
+
+                var listRecImg = new List<RecipeImage>();
+
+                foreach (var recipe in recipes)
+                {
+                    var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
+
+                    RecipeImage recipeImage = new RecipeImage
+                    {
+                        Recipe = recipe,
+                        Image = image
+                    };
+
+                    listRecImg.Add(recipeImage);
+                }
+
+                return View(listRecImg);
+            }
+
+            return NotFound();
+
+        }
+
     }
 }

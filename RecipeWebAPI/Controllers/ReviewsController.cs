@@ -29,17 +29,19 @@ namespace RecipeWebAPI.Controllers
         }
 
         // GET: api/Reviews/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Review>> GetReview(int id)
+        [HttpGet("{recipeId}")]
+        public async Task<ActionResult<double>> GetReview(int recipeId)
         {
-            var review = await _context.Reviews.FindAsync(id);
+            var ratings = await _context.Reviews.Where(x => x.RecipeId == recipeId).Select(x => new { x.Rating }).ToListAsync(); ;
+            double average = 0;
 
-            if (review == null)
+            if (ratings.Count() > 0)
             {
-                return NotFound();
+                average = (double)ratings.Sum(x => x.Rating) / ratings.Count();
+                return Math.Round(average, 2);
             }
 
-            return review;
+            return 0;
         }
 
         // GET: api/Review/5/user-hash
@@ -59,10 +61,10 @@ namespace RecipeWebAPI.Controllers
         // PUT: api/Reviews/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutReview(int id, Review review)
+        [HttpPut("{userId}/{recipeId}")]
+        public async Task<IActionResult> PutReview(string userId, int recipeId, Review review)
         {
-            if (id != review.Id)
+            if (userId != review.AppUserId || recipeId != review.RecipeId)
             {
                 return BadRequest();
             }
@@ -75,7 +77,7 @@ namespace RecipeWebAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReviewExists(id))
+                if (!ReviewExists(userId, recipeId))
                 {
                     return NotFound();
                 }
@@ -101,7 +103,7 @@ namespace RecipeWebAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (ReviewExists(review.Id))
+                if (ReviewExists(review.AppUserId, review.RecipeId))
                 {
                     return Conflict();
                 }
@@ -111,7 +113,7 @@ namespace RecipeWebAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("GetReview", new { id = review.Id }, review);
+            return CreatedAtAction("GetReview", new { appUserId = review.AppUserId, recipeId = review.RecipeId }, review);
         }
 
         // DELETE: api/Reviews/5
@@ -130,9 +132,9 @@ namespace RecipeWebAPI.Controllers
             return review;
         }
 
-        private bool ReviewExists(int id)
+        private bool ReviewExists(string userId, int recipeId)
         {
-            return _context.Reviews.Any(e => e.Id == id);
+            return _context.Reviews.Any(e => e.AppUserId.Equals(userId) && e.RecipeId == recipeId);
         }
     }
 }

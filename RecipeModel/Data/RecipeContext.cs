@@ -41,10 +41,10 @@ namespace RecipeModel.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<BrandIngredient>().HasKey(table => new { table.BrandId, table.IngredientId });
-            modelBuilder.Entity<FavouriteRecipe>().HasKey(table => new { table.Id, table.RecipeId, table.AppUserId });
+            modelBuilder.Entity<FavouriteRecipe>().HasKey(table => new { table.RecipeId, table.AppUserId });
             modelBuilder.Entity<Image>().HasKey(table => new { table.Id, table.RecipeId, table.AppUserId });
             modelBuilder.Entity<RecipeIngredient>().HasKey(table => new { table.RecipeId, table.IngredientId });
-            modelBuilder.Entity<Review>().HasKey(table => new { table.Id, table.AppUserId, table.RecipeId });
+            modelBuilder.Entity<Review>().HasKey(table => new {table.AppUserId, table.RecipeId });
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -41,18 +41,18 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: Reviews/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string userId, int recipeId)
         {
             var review = await _context.Reviews
                 .Include(r => r.Recipe)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (id == null)
+                .FirstOrDefaultAsync(m => m.AppUserId.Equals(userId) && m.RecipeId==recipeId);
+            if (userId == null || recipeId==0)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{userId}/{recipeId}");
             if (response.IsSuccessStatusCode)
             {
                 var reviews = JsonConvert.DeserializeObject<Review>(await response.Content.ReadAsStringAsync());
@@ -74,7 +74,7 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,RecipeId,Rating")] Review review)
+        public async Task<IActionResult> Create([Bind("UserId,RecipeId,Rating")] Review review)
         {
             if (!ModelState.IsValid)
             {
@@ -100,15 +100,15 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: Reviews/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string userId, int recipeId)
         {
-            if (id == null)
+            if (userId == null || recipeId == 0)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{userId}/{recipeId}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -124,12 +124,12 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,RecipeId,Rating")] Review review)
+        public async Task<IActionResult> Edit(string userId, int recipeId, [Bind("UserId,RecipeId,Rating")] Review review)
         {
             if (!ModelState.IsValid) return View(review);
             var client = new HttpClient();
             string json = JsonConvert.SerializeObject(review);
-            var response = await client.PutAsync($"{_baseUrl}/{review.Id}", new StringContent(json, Encoding.UTF8, "application/json"));
+            var response = await client.PutAsync($"{_baseUrl}/{review.AppUserId}/{review.RecipeId}", new StringContent(json, Encoding.UTF8, "application/json"));
 
             if (response.IsSuccessStatusCode)
             {
@@ -140,15 +140,15 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: Reviews/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string userId, int recipeId)
         {
-            if (id == null)
+            if (userId == null || recipeId == 0)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{userId}/{recipeId}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -162,12 +162,12 @@ namespace RecipeMVC.Controllers
         // POST: Reviews/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed([Bind("Id")] Review review)
+        public async Task<IActionResult> DeleteConfirmed([Bind("AppUserId, RecipeId")] Review review)
         {
             try
             {
                 var client = new HttpClient();
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{review.Id}")
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{review.AppUserId}/{review.RecipeId}")
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(review), Encoding.UTF8, "application/json")
                 };

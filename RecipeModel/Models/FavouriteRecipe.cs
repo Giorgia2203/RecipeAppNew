@@ -7,9 +7,7 @@ using System.Text;
 namespace RecipeModel.Models
 {
     public class FavouriteRecipe
-    {
-        public int Id { get; set; }
-
+    { 
         public string AppUserId { get; set; }
 
         public int RecipeId { get; set; }

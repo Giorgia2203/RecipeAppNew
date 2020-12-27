@@ -1,0 +1,26 @@
+﻿@model IEnumerable<RecipeModel.ViewModel.RecipeImage>
+@{
+    ViewData["Title"] = "GetUserRecipes";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br/>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+        <div class="row" style="align-items:center">
+            <div class="col-md-2">
+                <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
+                    <img class="img-thumbnail" src="/@item.Image.Filepath" style="margin-bottom:10px" width="300" height="200" />
+                </a>
+            </div>
+            <div class="col-md-10">
+                <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
+                    <h5>@Html.DisplayFor(modelItem => item.Recipe.Name)</h5>
+                </a>
+                <p>@Html.DisplayFor(modelItem => item.Recipe.Description)</p>
+            </div>
+        </div>
+
+        }
+    </div>
