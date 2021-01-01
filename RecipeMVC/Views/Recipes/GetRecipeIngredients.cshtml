@@ -1,0 +1,92 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RecipeModel.Models
+
+@model RecipeModel.ViewModel.RecipeIngredientBrand
+@inject UserManager<AppUser> UserManager
+
+@{
+    ViewData["Title"] = "GetRecipeIngredients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script type="text/javascript">
+        function addIngredient() {
+            ingredientsList = document.getElementById("ingredientsList");
+            ingredient = document.getElementById("ingredient");
+            brand = document.getElementById("brand");
+            amount = document.getElementById("amount");
+            measurement = document.getElementById("measurement");
+
+            itemText = amount.value + " " + measurement.value + " " + ingredient.value + " " + brand.value;
+            listItem = document.createElement("li")
+            listItem.appendChild(document.createTextNode(itemText))
+            ingredientsList.appendChild(listItem)
+        }
+
+        function redirectToMyRecipes(userId) {
+            window.location.href = `https://localhost:44310/Recipes/GetUserRecipes?userId=${userId}`;
+        }
+    </script>
+</head>
+<body>
+    <br />
+    <div class="row" style="align-items:center">
+        <div class="col">
+            <h3>Add your ingredients!</h3>
+        </div>
+        <div class="col">
+            <img src="~/Images/grocery.png" style="float:right">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="Create" enctype="application/json">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group" hidden>
+                        <label asp-for="Recipe.Id" class="control-label"></label>
+                        <input asp-for="Recipe.Id" class="form-control" value="@Context.Request.Query["recipeId"]" readonly />
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Ingredient.Name" class="control-label">Ingredient</label>
+                        <input id="ingredient" asp-for="Ingredient.Name" class="form-control" />
+                        <span asp-validation-for="Ingredient.Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Brand.Name" class="control-label">Brand</label>
+                        <input id="brand" asp-for="Brand.Name" class="form-control" />
+                        <span asp-validation-for="Brand.Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="RecipeIngredient.Amount" class="control-label">Amount</label>
+                        <input id="amount" asp-for="RecipeIngredient.Amount" class="form-control" />
+                        <span asp-validation-for="RecipeIngredient.Amount" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="RecipeIngredient.Measurement" class="control-label">Measurement</label>
+                        <input id="measurement" asp-for="RecipeIngredient.Measurement" class="form-control" />
+                        <span asp-validation-for="RecipeIngredient.Measurement" class="text-danger"></span>
+                    </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button asp-controller="Recipes" asp-action="GetRecipeIngredients" class="btn btn-outline-secondary" style="float:right">Add</button>
+                    </div>
+                    <div class="col-md-6">
+                        <button onclick="redirectToMyRecipes('@UserManager.GetUserId(User)')" class="btn btn-outline-success " style="float:right">Done</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

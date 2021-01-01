@@ -115,7 +115,13 @@
                 <li>@Html.DisplayFor(model => item.Amount) @Html.DisplayFor(model => item.Measurement) @Html.DisplayFor(model => item.Ingredient.Name) @Html.DisplayFor(model => item.Brand.Name)  </li>
             }
         </ul>
-
+        <hr />
+        <div>
+            <p style="font-weight:bold">Instructions</p>
+            <p>@Html.DisplayFor(model => model.Recipe.Instructions)</p>
+        </div>
+        <hr/>
+        <h5>Rate @Html.DisplayFor(model => model.AppUser.Name)'s recipe!</h5>
         <div class="rating">
             <span id="star-5" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>
             <span id="star-4" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>

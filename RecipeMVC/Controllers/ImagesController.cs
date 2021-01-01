@@ -10,6 +10,8 @@ using RecipeModel.Models;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace RecipeMVC.Controllers
 {
@@ -17,11 +19,13 @@ namespace RecipeMVC.Controllers
     {
         private readonly RecipeContext _context;
         private string _baseUrl = "http://localhost:50541/api/Images";
+        private readonly IWebHostEnvironment _hostEnvironment;
 
 
-        public ImagesController(RecipeContext context)
+        public ImagesController(RecipeContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            this._hostEnvironment = hostEnvironment;
         }
 
         // GET: Images
@@ -44,9 +48,6 @@ namespace RecipeMVC.Controllers
         // GET: Images/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-           /*var image = await _context.Images
-                .Include(i => i.Recipe)
-                .FirstOrDefaultAsync(m => m.Id == id);*/
             if (id == null)
             {
                 return new BadRequestResult();
@@ -76,7 +77,7 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RecipeId,UserId,Description,Filepath")] Image image)
+        public async Task<IActionResult> Create([Bind("Id,RecipeId,AppUserId,Description,Filepath,ImageFile")] Image image)
         {
             if (!ModelState.IsValid)
             {
@@ -85,12 +86,28 @@ namespace RecipeMVC.Controllers
 
             try
             {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(image.ImageFile.FileName);
+                string extension = Path.GetExtension(image.ImageFile.FileName);
+                image.Filepath = "Images/" + fileName + extension;
+                string path = Path.Combine(wwwRootPath + "/Images/", fileName + extension);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await image.ImageFile.CopyToAsync(fileStream);
+                }
+
                 var client = new HttpClient();
-                string json = JsonConvert.SerializeObject(image);
+                string json = JsonConvert.SerializeObject(new Image {
+                    RecipeId = image.RecipeId,
+                    AppUserId = image.AppUserId,
+                    Description = image.Description,
+                    Filepath = image.Filepath
+                });
                 var response = await client.PostAsync(_baseUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("GetRecipeIngredients", "Recipes", new { area = "", recipeId = image.RecipeId });
                 }
             }
             catch (Exception ex)

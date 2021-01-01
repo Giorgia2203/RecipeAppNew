@@ -27,6 +27,7 @@ namespace RecipeMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddControllersWithViews();
             services.AddDbContext<RecipeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RecipeContext>().AddDefaultTokenProviders();
@@ -55,6 +56,11 @@ namespace RecipeMVC
 
             app.UseRouting();
 
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials());
             app.UseAuthentication();
             app.UseAuthorization();
 

@@ -13,6 +13,7 @@ namespace RecipeWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[EnableCors(origins: "http://www.example.com", headers: "*", methods: "*")]
     public class FavouriteRecipesController : ControllerBase
     {
         private readonly RecipeContext _context;

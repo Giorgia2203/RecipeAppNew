@@ -13,6 +13,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Principal;
+using Newtonsoft.Json.Linq;
 
 namespace RecipeMVC.Controllers
 {
@@ -20,6 +21,10 @@ namespace RecipeMVC.Controllers
     {
         private readonly RecipeContext _context;
         private string _baseUrl = "http://localhost:50541/api/Recipes";
+        private string _ingredientsUrl = "http://localhost:50541/api/Ingredients";
+        private string _brandsUrl = "http://localhost:50541/api/Brands";
+        private string _brandsIngredientsUrl = "http://localhost:50541/api/BrandIngredients";
+        private string _recipeIngredientsUrl = "http://localhost:50541/api/RecipeIngredients";
 
         public RecipesController(RecipeContext context)
         {
@@ -114,10 +119,13 @@ namespace RecipeMVC.Controllers
             {
                 var client = new HttpClient();
                 string json = JsonConvert.SerializeObject(recipe);
-                var response = await client.PostAsync(_baseUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+                HttpResponseMessage response = await client.PostAsync(_baseUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+                string recipeJSON = await response.Content.ReadAsStringAsync();
+                Recipe addedRecipe = JsonConvert.DeserializeObject<Recipe>(recipeJSON);
+
                 if (response.IsSuccessStatusCode)
                 {
-                    return RedirectToAction("Create", "Images", new { area = "" });
+                    return RedirectToAction("Create", "Images", new { area = "", recipeId = addedRecipe.Id });
                 }
             }
             catch (Exception ex)
@@ -397,6 +405,78 @@ namespace RecipeMVC.Controllers
 
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetRecipeIngredients()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GetRecipeIngredients(RecipeIngredientBrand recipeIngredientBrand)
+        {
+            var client = new HttpClient();
+            var recipeIngredient = await _context.Ingredients
+                       .Join(_context.BrandIngredients,
+                          ingredient => ingredient.Id,
+                          brandIngredient => brandIngredient.IngredientId,
+                          (ingredient, brandIngredient) => new { Ingredient = ingredient, BrandIngredient = brandIngredient })
+                       .Join(_context.Brands,
+                          x => x.BrandIngredient.BrandId,
+                          brand => brand.Id,
+                          (x, brand) => new { Brand = brand, BrandIngredient = x.BrandIngredient, Ingredient = x.Ingredient })
+                       .Where(joinedData => joinedData.Brand.Name.Equals(recipeIngredientBrand.Brand.Name) &&
+                                            joinedData.Ingredient.Name.Equals(recipeIngredientBrand.Ingredient.Name))
+                       .FirstOrDefaultAsync();
+
+            // vezi daca exista brandul, vezi daca exista ingredientul
+            Brand brand = await _context.Brands.FirstOrDefaultAsync(b => b.Name.Equals(recipeIngredientBrand.Brand.Name));
+            if (brand == null)
+            {
+                string json = JsonConvert.SerializeObject(recipeIngredientBrand.Brand);
+                HttpResponseMessage response = await client.PostAsync(_brandsUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+                string brandJSON = await response.Content.ReadAsStringAsync();
+                brand = JsonConvert.DeserializeObject<Brand>(brandJSON);
+            }
+
+            Ingredient ingredient = await _context.Ingredients.FirstOrDefaultAsync(b => b.Name.Equals(recipeIngredientBrand.Ingredient.Name));
+            if (ingredient == null)
+            {
+                string json = JsonConvert.SerializeObject(recipeIngredientBrand.Ingredient);
+                HttpResponseMessage response = await client.PostAsync(_ingredientsUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+                string ingredientJSON = await response.Content.ReadAsStringAsync();
+                ingredient = JsonConvert.DeserializeObject<Ingredient>(ingredientJSON);
+            }
+   
+            if (recipeIngredient == null)
+            {
+                BrandIngredient brandIngredient = new BrandIngredient()
+                {
+                    BrandId = brand.Id,
+                    IngredientId = ingredient.Id
+                };
+
+                string json = JsonConvert.SerializeObject(brandIngredient);
+                HttpResponseMessage response = await client.PostAsync(_brandsIngredientsUrl, new StringContent(json, Encoding.UTF8, "application/json"));
+            }
+
+            int amount = recipeIngredientBrand.RecipeIngredient.Amount;
+            string measurement = recipeIngredientBrand.RecipeIngredient.Measurement;
+            int recipeId = recipeIngredientBrand.Recipe.Id;
+
+            RecipeIngredient recipeIngredientToAdd = new RecipeIngredient()
+            {
+                RecipeId = recipeId,
+                IngredientId = ingredient.Id,
+                BrandId = brand.Id,
+                Amount = amount,
+                Measurement = measurement
+            };
+
+            string recipeIngredientJSON = JsonConvert.SerializeObject(recipeIngredientToAdd);
+            HttpResponseMessage postResponse = await client.PostAsync(_recipeIngredientsUrl, new StringContent(recipeIngredientJSON, Encoding.UTF8, "application/json"));
+
+            return View();
+        }
     }
 }

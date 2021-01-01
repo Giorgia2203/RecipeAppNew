@@ -29,15 +29,15 @@
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Create">
+            <form asp-action="Create" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
+                <div class="form-group" hidden>
                     <label asp-for="RecipeId" class="control-label"></label>
-                    <select asp-for="RecipeId" class="form-control" asp-items="ViewBag.RecipeId"></select>
+                    <input asp-for="RecipeId" class="form-control" value="@Context.Request.Query["recipeId"]" readonly />
                 </div>
-                <div class="form-group">
+                <div class="form-group" hidden>
                     <label asp-for="AppUserId" class="control-label"></label>
-                    <input asp-for="AppUserId" class="form-control" value="@UserManager.GetUserId(User)"/>
+                    <input asp-for="AppUserId" class="form-control" value="@UserManager.GetUserId(User)" />
                     <span asp-validation-for="AppUserId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -45,21 +45,19 @@
                     <input asp-for="Description" class="form-control" />
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
-                <div class="form-group">
-                    <label asp-for="Filepath" class="control-label"></label>
-                    <input asp-for="Filepath" class="form-control" />
-                    <span asp-validation-for="Filepath" class="text-danger"></span>
+                <div class="form-group ">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" accept="image/*" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
                 </div>
+                <br/>
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Add image" class="btn btn-outline-success" style="float:right" />
                 </div>
             </form>
         </div>
     </div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
 </body>
 </html>
 
