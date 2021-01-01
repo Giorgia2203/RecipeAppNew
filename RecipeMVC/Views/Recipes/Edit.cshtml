@@ -1,70 +1,107 @@
 ﻿@model RecipeModel.Models.Recipe
+@using Microsoft.AspNetCore.Identity
+@using RecipeModel.Models
+@inject UserManager<AppUser> UserManager
 
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
-
-<h4>Recipe</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Instructions" class="control-label"></label>
-                <input asp-for="Instructions" class="form-control" />
-                <span asp-validation-for="Instructions" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PreparationTime" class="control-label"></label>
-                <input asp-for="PreparationTime" class="form-control" />
-                <span asp-validation-for="PreparationTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BakingTime" class="control-label"></label>
-                <input asp-for="BakingTime" class="form-control" />
-                <span asp-validation-for="BakingTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServingSize" class="control-label"></label>
-                <input asp-for="ServingSize" class="form-control" />
-                <span asp-validation-for="ServingSize" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <br />
+    <div class="row" style="align-items:center">
+        <div class="col">
+            <h3>Edit your recipe</h3>
+        </div>
+        <div class="col">
+            <img src="~/Images/pages.png" style="float:right">
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
+    <hr />
+    <div class="row">
+        <div class="col-md-10 mx-auto">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label asp-for="Name" class="control-label">Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Category" class="control-label">Category</label>
+                        <input asp-for="Category" class="form-control" />
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label asp-for="Description" class="control-label">Description</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="Instructions" class="control-label">Instructions</label>
+                        <textarea asp-for="Instructions" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Instructions" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-3">
+                        <label asp-for="PreparationTime" class="control-label">Preparation time</label>
+                        <input asp-for="PreparationTime" class="form-control" />
+                        <span asp-validation-for="PreparationTime" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-3">
+                        <label asp-for="BakingTime" class="control-label">Baking time</label>
+                        <input asp-for="BakingTime" class="form-control" />
+                        <span asp-validation-for="BakingTime" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="ServingSize" class="control-label">Serving size</label>
+                        <input asp-for="ServingSize" class="form-control" />
+                        <span asp-validation-for="ServingSize" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6">
+                        <label asp-for="Cuisine" class="control-label">Cuisine</label>
+                        <input asp-for="Cuisine" class="form-control" />
+                        <span asp-validation-for="Cuisine" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <label asp-for="CreationDate" class="control-label">Creation Date</label>
+                        <input asp-for="CreationDate" class="form-control" />
+                        <span asp-validation-for="CreationDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="form-group row">
+                    <div class="col-md-6">
+                        <a asp-action="GetUserRecipes" asp-route-userId="@UserManager.GetUserId(User)" class="btn btn-outline-secondary">Back</a>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="submit" value="Save" class="btn btn-outline-success" style="float:right" />
+                    </div>
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="AppUserId" class="control-label">Author</label>
+                    <input asp-for="AppUserId" class="form-control" value="@UserManager.GetUserId(User)" />
+                    <span asp-validation-for="AppUserId" class="text-danger"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -87,7 +87,7 @@ namespace RecipeWebAPI.Controllers
                 }
             }
 
-            return NoContent();
+            return CreatedAtAction("GetReview", new { appUserId = review.AppUserId, recipeId = review.RecipeId }, review);
         }
 
         // POST: api/Reviews

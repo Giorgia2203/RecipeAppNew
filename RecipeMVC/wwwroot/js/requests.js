@@ -1,9 +1,8 @@
-﻿const ratingURI = "http://localhost:50541/api/Reviews"
-const favouriteURI = "http://localhost:50541/api/FavouriteRecipes"
+﻿const ratingURI = "https://localhost:44331/api/Reviews"
+const favouriteURI = "https://localhost:44331/api/FavouriteRecipes"
 
 function addRating(event,userId,recipeId) {
-    const star = event.target.id.split("-").pop()
-    console.log(star)
+    const star = parseInt(event.target.id.split("-").pop())
 
     review = {
         appUserId: userId,
@@ -11,8 +10,8 @@ function addRating(event,userId,recipeId) {
         rating: star
     };
 
-    fetch(ratingURI, {
-        method: 'POST',
+    fetch(ratingURI + "/" + userId + "/" + recipeId, {
+        method: 'PUT',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
@@ -21,6 +20,7 @@ function addRating(event,userId,recipeId) {
     })
         .then(response => response.json())
         .then(() => {
+            console.log('THEN')
             getAverageRatingForRecipe(recipeId)
             setRating(star)
         })
@@ -85,18 +85,20 @@ function setFavourite(isFavourite) {
 
     if (isFavourite) {
         isFavouriteElement.style.color = "#e23232"
+    } else {
+        isFavouriteElement.style.color = "#808080"
     }
 }
 
 function favouriteClicked(event,userId,recipeId) {
     heartColor = document.getElementsByClassName("favourite")[0].style.color
-    console.log(heartColor)
 
     if (heartColor === "rgb(226, 50, 50)")
     {
         fetch(favouriteURI + "/" + userId + "/" + recipeId, {
             method: 'DELETE'
         })
+            .then(response => response.json())
             .then(() => setFavourite(false))
             .catch(error => console.error('Unable to delete favourite recipe.', error));
     }

@@ -1,70 +1,94 @@
 ﻿@model RecipeModel.Models.Recipe
+@using Microsoft.AspNetCore.Identity
+@using RecipeModel.Models
+
+@inject UserManager<AppUser> UserManager
 
 @{
     ViewData["Title"] = "Delete";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Delete</h1>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Recipe</h4>
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <br />
+    <div class="row" style="align-items:center">
+        <div class="col">
+            <h3>Are you sure you want to delete this?</h3>
+        </div>
+        <div class="col">
+            <img src="~/Images/delete.png" style="float:right">
+        </div>
+    </div>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Instructions)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Instructions)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PreparationTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PreparationTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.BakingTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.BakingTime)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ServingSize)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ServingSize)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+    <div>
+        <dl class="row">
+            <dt class="col-sm-2">
+                Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Description
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                Instructions
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Instructions)
+            </dd>
+            <dt class="col-sm-2">
+                Preparation time
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.PreparationTime)'
+            </dd>
+            <dt class="col-sm-2">
+                Baking time
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.BakingTime)'
+            </dd>
+            <dt class="col-sm-2">
+                Serving size
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ServingSize)
+            </dd>
+            <dt class="col-sm-2">
+                Cuisine
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Cuisine)
+            </dd>
+            <dt class="col-sm-2">
+                Category
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Category)
+            </dd>
+            <dt class="col-sm-2">
+                Creation date
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreationDate)
+            </dd>
+        </dl>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="Id" />
+            <input type="submit" value="Delete" class="btn btn-danger" /> |
+            <button class="btn btn-outline-info" asp-controller="Recipes" asp-action="GetUserRecipes" asp-route-userId="@UserManager.GetUserId(User)">Back to List</button>
+        </form>
+    </div>
+</body>
+</html>

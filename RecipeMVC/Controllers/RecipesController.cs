@@ -161,7 +161,7 @@ namespace RecipeMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Instructions,PreparationTime,BakingTime,ServingSize,Category,CreationDate")] Recipe recipe)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Instructions,PreparationTime,BakingTime,ServingSize,Category,CreationDate,AppUserId,Cuisine")] Recipe recipe)
         {
             if (!ModelState.IsValid) return View(recipe);
             var client = new HttpClient();
@@ -210,7 +210,7 @@ namespace RecipeMVC.Controllers
                 };
 
                 var response = await client.SendAsync(request);
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexImage");
             }
             catch (Exception ex)
             {
@@ -478,5 +478,6 @@ namespace RecipeMVC.Controllers
 
             return View();
         }
+
     }
 }

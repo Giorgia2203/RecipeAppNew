@@ -46,7 +46,7 @@
     <hr />
     <div class="row">
         <div class="col-md-10">
-            <form asp-action="Create" enctype="application/json">
+            <form asp-action="GetRecipeIngredients" enctype="application/json">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group" hidden>
                         <label asp-for="Recipe.Id" class="control-label"></label>
@@ -78,7 +78,7 @@
                         <button asp-controller="Recipes" asp-action="GetRecipeIngredients" class="btn btn-outline-secondary" style="float:right">Add</button>
                     </div>
                     <div class="col-md-6">
-                        <button onclick="redirectToMyRecipes('@UserManager.GetUserId(User)')" class="btn btn-outline-success " style="float:right">Done</button>
+                        <button asp-controller="Recipes" asp-action="GetUserRecipes" asp-route-userId="@UserManager.GetUserId(User)" class="btn btn-outline-success " style="float:right">Done</button>
                     </div>
                 </div>
             </form>

@@ -8,19 +8,23 @@
     <div class="row">
         @foreach (var item in Model)
         {
-        <div class="row" style="align-items:center">
-            <div class="col-md-2">
-                <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
-                    <img class="img-thumbnail" src="/@item.Image.Filepath" style="margin-bottom:10px" width="300" height="200" />
-                </a>
+            <div class="row" style="align-items:center">
+                <div class="col-md-2">
+                    <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
+                        <img class="img-thumbnail" src="/@item.Image.Filepath" style="margin-bottom:10px" width="300" height="200" />
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
+                        <h5>@Html.DisplayFor(modelItem => item.Recipe.Name)</h5>
+                    </a>
+                    <p>@Html.DisplayFor(modelItem => item.Recipe.Description)</p>
+                </div>
+                <div class="col-md-4">
+                    <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@item.Recipe.Id">Edit</a> |
+                    <a asp-controller="Recipes" asp-action="Delete" asp-route-id="@item.Recipe.Id">Delete</a>
+                </div>
             </div>
-            <div class="col-md-10">
-                <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
-                    <h5>@Html.DisplayFor(modelItem => item.Recipe.Name)</h5>
-                </a>
-                <p>@Html.DisplayFor(modelItem => item.Recipe.Description)</p>
-            </div>
-        </div>
 
         }
     </div>
