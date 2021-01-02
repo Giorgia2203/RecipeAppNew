@@ -1,0 +1,70 @@
+﻿@model RecipeModel.Models.RecipeIngredient
+@{
+    ViewData["Title"] = "IngredientBrandEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <br />
+    <div class="row" style="align-items:center">
+        <div class="col">
+            <h3>Edit your ingredients</h3>
+        </div>
+        <div class="col">
+            <img src="~/Images/ingredients.png" style="float:right">
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-10">
+            <form asp-action="IngredientBrandEdit" enctype="application/json">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group" hidden>
+                    <label asp-for="RecipeId" class="control-label"></label>
+                    <input asp-for="RecipeId" class="form-control" readonly />
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="IngredientId" class="control-label"></label>
+                    <input asp-for="IngredientId" class="form-control" readonly />
+                </div>
+                <div class="form-group" hidden>
+                    <label asp-for="BrandId" class="control-label"></label>
+                    <input asp-for="BrandId" class="form-control" readonly />
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="Ingredient.Name" class="control-label">Ingredient</label>
+                    <input id="ingredient" asp-for="Ingredient.Name" class="form-control" />
+                    <span asp-validation-for="Ingredient.Name" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="Brand.Name" class="control-label">Brand</label>
+                    <input id="brand" asp-for="Brand.Name" class="form-control" />
+                    <span asp-validation-for="Brand.Name" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="Amount" class="control-label">Amount</label>
+                    <input id="amount" asp-for="Amount" class="form-control" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="Measurement" class="control-label">Measurement</label>
+                    <input id="measurement" asp-for="Measurement" class="form-control" />
+                    <span asp-validation-for="Measurement" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-outline-success">Edit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+

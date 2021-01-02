@@ -10,6 +10,7 @@ using RecipeModel.Models;
 using System.Net.Http;
 using System.Text;
 using Newtonsoft.Json;
+using RecipeModel.ViewModel;
 
 namespace RecipeMVC.Controllers
 {
@@ -35,6 +36,44 @@ namespace RecipeMVC.Controllers
                 var recipeingredients = JsonConvert.DeserializeObject<List<RecipeIngredient>>(await response.Content.ReadAsStringAsync());
 
                 return View(recipeingredients);
+            }
+
+            return NotFound();
+        }
+
+        // GET: RecipeIngredients
+        public async Task<IActionResult> IngredientsInRecipe(int recipeId)
+        {
+            var recipeContext = _context.RecipeIngredients.Include(r => r.Ingredient).Include(r => r.Recipe);
+            var client = new HttpClient();
+            var response = await client.GetAsync(_baseUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var recipeIngredientsAll = JsonConvert.DeserializeObject<List<RecipeIngredient>>(await response.Content.ReadAsStringAsync());
+                var ingredientsAll = JsonConvert.DeserializeObject<List<Ingredient>>(await (await client.GetAsync("http://localhost:50541/api/Ingredients")).Content.ReadAsStringAsync());
+                var brandsAll = JsonConvert.DeserializeObject<List<Brand>>(await (await client.GetAsync("http://localhost:50541/api/Brands")).Content.ReadAsStringAsync());
+
+                var recipeIngredients = recipeIngredientsAll.Where(x => x.RecipeId == recipeId);
+
+                var listIngredientBrand = new List<IngredientBrand>();
+
+                foreach (var recipeIngredient in recipeIngredients)
+                {
+                    var ingredient = ingredientsAll.Where(x => x.Id == recipeIngredient.IngredientId).FirstOrDefault();
+                    var brand = brandsAll.Where(x => x.Id == recipeIngredient.BrandId).FirstOrDefault();
+
+                    IngredientBrand ingredientBrand = new IngredientBrand()
+                    {
+                        Ingredient = ingredient,
+                        Brand = brand,
+                        RecipeIngredient = recipeIngredient
+                    };
+
+                    listIngredientBrand.Add(ingredientBrand);
+                }
+
+                return View(listIngredientBrand);
             }
 
             return NotFound();
@@ -137,7 +176,7 @@ namespace RecipeMVC.Controllers
             if (!ModelState.IsValid) return View(recipeIngredient);
             var client = new HttpClient();
             string json = JsonConvert.SerializeObject(recipeIngredient);
-            var response = await client.PutAsync($"{_baseUrl}/{recipeIngredient.RecipeId/recipeIngredient.IngredientId}", new StringContent(json, Encoding.UTF8, "application/json"));
+            var response = await client.PutAsync($"{_baseUrl}/{recipeIngredient.RecipeId / recipeIngredient.IngredientId}", new StringContent(json, Encoding.UTF8, "application/json"));
 
             if (response.IsSuccessStatusCode)
             {
@@ -148,19 +187,15 @@ namespace RecipeMVC.Controllers
         }
 
         // GET: RecipeIngredients/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int recipeId, int ingredientId, int brandId)
         {
-            /*var recipeIngredient = await _context.RecipeIngredients
-                .Include(r => r.Ingredient)
-                .Include(r => r.Recipe)
-                .FirstOrDefaultAsync(m => m.RecipeId == id);*/
-            if (id == null)
+            if (recipeId == 0 || ingredientId == 0 || brandId == 0)
             {
                 return new BadRequestResult();
             }
 
             var client = new HttpClient();
-            var response = await client.GetAsync($"{_baseUrl}/{id.Value}");
+            var response = await client.GetAsync($"{_baseUrl}/{recipeId}/{ingredientId}/{brandId}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -174,12 +209,12 @@ namespace RecipeMVC.Controllers
         // POST: RecipeIngredients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed([Bind("Id")] RecipeIngredient recipeIngredient)
+        public async Task<IActionResult> DeleteConfirmed(RecipeIngredient recipeIngredient)
         {
             try
             {
                 var client = new HttpClient();
-                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{recipeIngredient.RecipeId}/{recipeIngredient.IngredientId}")
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Delete, $"{_baseUrl}/{recipeIngredient.RecipeId}/{recipeIngredient.IngredientId}/{recipeIngredient.BrandId}")
                 {
                     Content = new StringContent(JsonConvert.SerializeObject(recipeIngredient), Encoding.UTF8, "application/json")
                 };
@@ -194,5 +229,50 @@ namespace RecipeMVC.Controllers
 
             return View(recipeIngredient);
         }
+
+        //GET 
+        [HttpGet]
+        public async Task<IActionResult> IngredientBrandEdit(int recipeId,int ingredientId, int brandId)
+        {
+            // ViewData["IngredientId"] = new SelectList(_context.Ingredients, "Id", "Id", recipeIngredient.IngredientId);
+            // ViewData["RecipeId"] = new SelectList(_context.Recipes, "Id", "Id", recipeIngredient.RecipeId);
+            if (recipeId == 0 || ingredientId == 0 || brandId == 0)
+            {
+                return new BadRequestResult();
+            }
+
+            var client = new HttpClient();
+            var response = await client.GetAsync($"{_baseUrl}/{recipeId}/{ingredientId}/{brandId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var ingredientBrand = JsonConvert.DeserializeObject<RecipeIngredient>(await response.Content.ReadAsStringAsync());
+                return View(ingredientBrand);
+            }
+
+            return new NotFoundResult();
+        }
+
+        // POST: RecipeIngredients/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> IngredientBrandEdit(RecipeIngredient recipeIngredient)
+        {
+            if (!ModelState.IsValid) return View(recipeIngredient);
+            var client = new HttpClient();
+            string json = JsonConvert.SerializeObject(recipeIngredient);
+            var response = await client.PutAsync($"{_baseUrl}/{recipeIngredient.RecipeId}/{recipeIngredient.IngredientId}/{recipeIngredient.BrandId}", new StringContent(json, Encoding.UTF8, "application/json"));
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            return View(recipeIngredient);
+        }
+
     }
 }

@@ -38,7 +38,6 @@ namespace RecipeMVC.Controllers
 
             return NotFound();
         }
-
         // GET: Ingredients/Details/5
         public async Task<IActionResult> Details(int? id)
         {

@@ -14,15 +14,16 @@
                         <img class="img-thumbnail" src="/@item.Image.Filepath" style="margin-bottom:10px" width="300" height="200" />
                     </a>
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <a asp-area="" asp-controller="Recipes" asp-action="RecImgDetails" asp-route-id="@item.Recipe.Id">
                         <h5>@Html.DisplayFor(modelItem => item.Recipe.Name)</h5>
                     </a>
                     <p>@Html.DisplayFor(modelItem => item.Recipe.Description)</p>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     <a asp-controller="Recipes" asp-action="Edit" asp-route-id="@item.Recipe.Id">Edit</a> |
-                    <a asp-controller="Recipes" asp-action="Delete" asp-route-id="@item.Recipe.Id">Delete</a>
+                    <a asp-controller="Recipes" asp-action="Delete" asp-route-id="@item.Recipe.Id">Delete</a> |
+                    <a asp-controller="RecipeIngredients" asp-action="IngredientsInRecipe" asp-route-recipeId="@item.Recipe.Id">Show ingredients</a>
                 </div>
             </div>
 

@@ -45,6 +45,9 @@ namespace RecipeModel.Data
             modelBuilder.Entity<Image>().HasKey(table => new { table.Id, table.RecipeId, table.AppUserId });
             modelBuilder.Entity<RecipeIngredient>().HasKey(table => new { table.RecipeId, table.IngredientId });
             modelBuilder.Entity<Review>().HasKey(table => new {table.AppUserId, table.RecipeId });
+            
+            modelBuilder.Entity<RecipeIngredient>().Ignore(a => a.Recipe);
+            modelBuilder.Entity<Ingredient>().Ignore(a => a.Recipes);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

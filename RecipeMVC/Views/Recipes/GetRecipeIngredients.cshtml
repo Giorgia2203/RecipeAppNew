@@ -75,10 +75,10 @@
                 <br/>
                 <div class="row">
                     <div class="col-md-6">
-                        <button asp-controller="Recipes" asp-action="GetRecipeIngredients" class="btn btn-outline-secondary" style="float:right">Add</button>
+                        <button type="submit" asp-controller="Recipes" asp-action="GetRecipeIngredients" class="btn btn-outline-secondary" style="float:right">Add</button>
                     </div>
                     <div class="col-md-6">
-                        <button asp-controller="Recipes" asp-action="GetUserRecipes" asp-route-userId="@UserManager.GetUserId(User)" class="btn btn-outline-success " style="float:right">Done</button>
+                        <a asp-controller="Recipes" asp-action="GetUserRecipes" asp-route-userId="@UserManager.GetUserId(User)" class="btn btn-outline-success " style="float:right">Done</a>
                     </div>
                 </div>
             </form>

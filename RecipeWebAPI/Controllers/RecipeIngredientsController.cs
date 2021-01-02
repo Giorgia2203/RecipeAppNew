@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RecipeModel.Data;
 using RecipeModel.Models;
+using RecipeModel.ViewModel;
 
 namespace RecipeWebAPI.Controllers
 {
@@ -61,7 +62,7 @@ namespace RecipeWebAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RecipeIngredientExists(id))
+                if (!RecipeIngredientExists(id, recipeIngredient.IngredientId))
                 {
                     return NotFound();
                 }
@@ -87,7 +88,7 @@ namespace RecipeWebAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (RecipeIngredientExists(recipeIngredient.RecipeId))
+                if (RecipeIngredientExists(recipeIngredient.RecipeId, recipeIngredient.IngredientId))
                 {
                     return Conflict();
                 }
@@ -101,10 +102,10 @@ namespace RecipeWebAPI.Controllers
         }
 
         // DELETE: api/RecipeIngredients/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<RecipeIngredient>> DeleteRecipeIngredient(int id)
+        [HttpDelete("{recipeId}/{ingredientId}/{brandId}")]
+        public async Task<ActionResult<RecipeIngredient>> DeleteRecipeIngredient(int recipeId, int ingredientId, int brandId)
         {
-            var recipeIngredient = await _context.RecipeIngredients.FindAsync(id);
+            var recipeIngredient = await _context.RecipeIngredients.FirstOrDefaultAsync(x => x.RecipeId == recipeId && x.IngredientId == ingredientId && x.BrandId == brandId);
             if (recipeIngredient == null)
             {
                 return NotFound();
@@ -116,9 +117,63 @@ namespace RecipeWebAPI.Controllers
             return recipeIngredient;
         }
 
-        private bool RecipeIngredientExists(int id)
+        private bool RecipeIngredientExists(int recipeId, int ingredientId)
         {
-            return _context.RecipeIngredients.Any(e => e.RecipeId == id);
+            return _context.RecipeIngredients.Any(e => e.RecipeId == recipeId && e.IngredientId == ingredientId);
+        }
+
+
+        [HttpGet("{recipeId}/{ingredientId}/{brandId}")]
+        public async Task<ActionResult<RecipeIngredient>> GetIngredientBrand(int recipeId, int ingredientId, int brandId)
+        {
+            var recipeIngredient = await _context.RecipeIngredients.FirstOrDefaultAsync(x => x.RecipeId == recipeId && x.IngredientId == ingredientId && x.BrandId == brandId);
+
+            var ingredient = await _context.Ingredients.FirstOrDefaultAsync(x=>x.Id == ingredientId);
+            var brand = await _context.Brands.FirstOrDefaultAsync(x => x.Id == brandId);
+
+            recipeIngredient.Brand = brand;
+            recipeIngredient.Ingredient = ingredient;
+
+            if (recipeIngredient == null)
+            {
+                return NotFound();
+            }
+
+            return recipeIngredient;
+        }
+
+
+        [HttpPut("{recipeId}/{ingredientId}/{brandId}")]
+        public async Task<ActionResult<IngredientBrand>> PutIngredientBrandEdit(int recipeId, int ingredientId, int brandId, RecipeIngredient updatedRecipeIngredient)
+        {
+            var recipeIngredient = await _context.RecipeIngredients.FirstOrDefaultAsync(x=>x.RecipeId == recipeId && x.IngredientId == ingredientId && x.BrandId == brandId);
+           
+            if (recipeIngredient == null)
+            {
+                return NotFound();
+            }
+
+            recipeIngredient.Measurement = updatedRecipeIngredient.Measurement;
+            recipeIngredient.Amount = updatedRecipeIngredient.Amount;
+            _context.Entry(recipeIngredient).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!RecipeIngredientExists(recipeId,ingredientId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
     }
 }
