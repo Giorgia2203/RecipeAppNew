@@ -54,6 +54,11 @@
     </style>
 </head>
 <body>
+    <div id="warning" class="alert alert-dismissible alert-warning" style="display:none">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <h4 class="alert-heading">Warning!</h4>
+        <p id="warningText" class="mb-0"></p>
+    </div>
     <div>
         <br />
         <div class="row">
@@ -120,7 +125,7 @@
             <p style="font-weight:bold">Instructions</p>
             <p>@Html.DisplayFor(model => model.Recipe.Instructions)</p>
         </div>
-        <hr/>
+        <hr />
         <h5>Rate @Html.DisplayFor(model => model.AppUser.Name)'s recipe!</h5>
         <div class="rating">
             <span id="star-5" class="fa fa-star" onclick="addRating(event,'@UserManager.GetUserId(User)',@Model.Recipe.Id)"></span>

@@ -1,31 +1,37 @@
 ﻿const ratingURI = "https://localhost:44331/api/Reviews"
 const favouriteURI = "https://localhost:44331/api/FavouriteRecipes"
 
-function addRating(event,userId,recipeId) {
-    const star = parseInt(event.target.id.split("-").pop())
+function addRating(event, userId, recipeId) {
+    if (userId) {
+        const star = parseInt(event.target.id.split("-").pop())
+        review = {
+            appUserId: userId,
+            recipeId: recipeId,
+            rating: star
+        };
 
-    review = {
-        appUserId: userId,
-        recipeId: recipeId,
-        rating: star
-    };
-
-    fetch(ratingURI + "/" + userId + "/" + recipeId, {
-        method: 'PUT',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(review)
-    })
-        .then(response => response.json())
-        .then(() => {
-            console.log('THEN')
-            getAverageRatingForRecipe(recipeId)
-            setRating(star)
+        fetch(ratingURI + "/" + userId + "/" + recipeId, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(review)
         })
-        .catch(error => console.error('Unable to add rating.', error));
-
+            .then(response => response.json())
+            .then(() => {
+                console.log('THEN')
+                getAverageRatingForRecipe(recipeId)
+                setRating(star)
+            })
+            .catch(error => console.error('Unable to add rating.', error));
+    }
+    else {
+        alerta = document.getElementById("warning");
+        text = document.getElementById("warningText");
+        text.innerHTML = "You have to log in to add a rating to this recipe.";
+        alerta.style.display = "block";
+    }
 }
 
 function getRatingForUserAndRecipe(recipeId, userId) {
@@ -93,33 +99,41 @@ function setFavourite(isFavourite) {
 function favouriteClicked(event,userId,recipeId) {
     heartColor = document.getElementsByClassName("favourite")[0].style.color
 
-    if (heartColor === "rgb(226, 50, 50)")
-    {
-        fetch(favouriteURI + "/" + userId + "/" + recipeId, {
-            method: 'DELETE'
-        })
-            .then(response => response.json())
-            .then(() => setFavourite(false))
-            .catch(error => console.error('Unable to delete favourite recipe.', error));
-    }
-    else
-    {
-        favouriteRecipe =
+    if (userId) {
+        if (heartColor === "rgb(226, 50, 50)")
         {
-            appUserId: userId,
-            recipeId: recipeId
-        };
-
-        fetch(favouriteURI, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(favouriteRecipe)
-        })
-            .then(response => response.json())
-            .then(() => setFavourite(true))
-            .catch(error => console.error('Unable to add as favourite recipe.', error));
+            fetch(favouriteURI + "/" + userId + "/" + recipeId, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(() => setFavourite(false))
+                .catch(error => console.error('Unable to delete favourite recipe.', error));
+        }
+        else
+        {
+            favouriteRecipe =
+            {
+                appUserId: userId,
+                recipeId: recipeId
+            };
+    
+            fetch(favouriteURI, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(favouriteRecipe)
+            })
+                .then(response => response.json())
+                .then(() => setFavourite(true))
+                .catch(error => console.error('Unable to add as favourite recipe.', error));
+        }
+    }
+    else {
+        alerta = document.getElementById("warning");
+        text = document.getElementById("warningText");
+        text.innerHTML = "You have to log in to add this recipe as your favourite.";
+        alerta.style.display = "block";
     }
 }
