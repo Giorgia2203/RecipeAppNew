@@ -51,24 +51,31 @@ namespace RecipeMVC.Controllers
                 var faveRecipesAll = JsonConvert.DeserializeObject<List<FavouriteRecipe>>(await response.Content.ReadAsStringAsync());
                 var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
 
-                var faveRecipesForUser = faveRecipesAll.Where(x => x.AppUserId.Equals(userId));
+                var faveRecipesForUser = faveRecipesAll.Where(x => x.AppUserId.Equals(userId)).ToList();
 
                 var listRecImg = new List<RecipeImage>();
 
-                foreach (var faveRecipe in faveRecipesForUser)
+
+                if (faveRecipesForUser.Count == 0)
                 {
-                    var recipe = _context.Recipes.FirstOrDefault(x => x.Id == faveRecipe.RecipeId);
-                    var image = images.FirstOrDefault(x => x.RecipeId == faveRecipe.RecipeId);
-
-                    RecipeImage recipeImage = new RecipeImage
-                    {
-                        Recipe = recipe,
-                        Image = image
-                    };
-
-                    listRecImg.Add(recipeImage);
+                    return RedirectToAction("FavouriteRecipeNotFound");
                 }
+                else
+                {
+                    foreach (var faveRecipe in faveRecipesForUser)
+                    {
+                        var recipe = _context.Recipes.FirstOrDefault(x => x.Id == faveRecipe.RecipeId);
+                        var image = images.FirstOrDefault(x => x.RecipeId == faveRecipe.RecipeId);
 
+                        RecipeImage recipeImage = new RecipeImage
+                        {
+                            Recipe = recipe,
+                            Image = image
+                        };
+
+                        listRecImg.Add(recipeImage);
+                    }
+                }
                 return View(listRecImg);
             }
 
@@ -223,6 +230,13 @@ namespace RecipeMVC.Controllers
             }
 
             return View(favouriteRecipe);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> FavouriteRecipeNotFound()
+        {
+            return View();
         }
     }
 }

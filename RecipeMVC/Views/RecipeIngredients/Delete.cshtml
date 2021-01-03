@@ -15,10 +15,10 @@
     <br />
     <div class="row" style="align-items:center">
         <div class="col">
-            <h3>Edit your ingredients</h3>
+            <h3>Delete your ingredients</h3>
         </div>
         <div class="col">
-            <img src="~/Images/ingredients.png" style="float:right">
+            <img src="~/Images/delete.png" style="float:right">
         </div>
     </div>
     <hr />
@@ -55,8 +55,9 @@
         <input type="hidden" asp-for="RecipeId" />
         <input type="hidden" asp-for="IngredientId" />
         <input type="hidden" asp-for="BrandId" />
-        <a asp-action="Index">Back</a>
-        <input type="submit" value="Delete" class="btn btn-danger" />
+        <br/>
+        <a class="btn btn-outline-secondary" asp-controller="RecipeIngredients" asp-action="IngredientsInRecipe" asp-route-recipeId="@Model.RecipeId">Back</a> | 
+        <input type="submit" value="Delete" class="btn btn-outline-danger" />
     </form>
    
 </body>

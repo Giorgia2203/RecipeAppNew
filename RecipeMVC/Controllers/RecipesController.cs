@@ -381,23 +381,30 @@ namespace RecipeMVC.Controllers
                 var recipesAll = JsonConvert.DeserializeObject<List<Recipe>>(await response.Content.ReadAsStringAsync());
                 var images = JsonConvert.DeserializeObject<List<Image>>(await (await client.GetAsync("http://localhost:50541/api/Images")).Content.ReadAsStringAsync());
 
-                var recipes = recipesAll.Where(x => x.AppUserId.Equals(userId));
+                var recipes = recipesAll.Where(x => x.AppUserId.Equals(userId)).ToList();
 
                 var listRecImg = new List<RecipeImage>();
 
-                foreach (var recipe in recipes)
+
+                if (recipes.Count == 0)
                 {
-                    var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
-
-                    RecipeImage recipeImage = new RecipeImage
-                    {
-                        Recipe = recipe,
-                        Image = image
-                    };
-
-                    listRecImg.Add(recipeImage);
+                    return RedirectToAction("UserRecipeNotFound");
                 }
+                else
+                {
+                    foreach (var recipe in recipes)
+                    {
+                        var image = images.Where(x => x.RecipeId == recipe.Id).ToList().First();
 
+                        RecipeImage recipeImage = new RecipeImage
+                        {
+                            Recipe = recipe,
+                            Image = image
+                        };
+
+                        listRecImg.Add(recipeImage);
+                    }
+                }
                 return View(listRecImg);
             }
 
@@ -476,6 +483,14 @@ namespace RecipeMVC.Controllers
             string recipeIngredientJSON = JsonConvert.SerializeObject(recipeIngredientToAdd);
             HttpResponseMessage postResponse = await client.PostAsync(_recipeIngredientsUrl, new StringContent(recipeIngredientJSON, Encoding.UTF8, "application/json"));
 
+            //ModelState.Clear();
+            return View();
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> UserRecipeNotFound()
+        {
             return View();
         }
 

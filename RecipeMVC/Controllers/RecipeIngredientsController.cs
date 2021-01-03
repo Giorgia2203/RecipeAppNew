@@ -220,7 +220,7 @@ namespace RecipeMVC.Controllers
                 };
 
                 var response = await client.SendAsync(request);
-                return RedirectToAction("Index");
+                return RedirectToAction("IngredientsInRecipe", new { recipeId = recipeIngredient.RecipeId });
             }
             catch (Exception ex)
             {
@@ -268,7 +268,7 @@ namespace RecipeMVC.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("IngredientsInRecipe", new { recipeId = recipeIngredient.RecipeId});
             }
 
             return View(recipeIngredient);
