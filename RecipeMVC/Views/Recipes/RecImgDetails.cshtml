@@ -100,7 +100,7 @@
                 <div class="row">
                     <img width="35" height="35" src="~/Images/cooking.png" style="margin-left:10px" />
                     <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Author:</p>
-                    <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.AppUser.Name)</p>
+                    <a asp-controller="Home" asp-action="Chat"><p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.AppUser.Name)</p></a>
                 </div>
                 <div class="row">
                     <img width="35" height="35" src="~/Images/schedule.png" style="margin-left:10px" />

@@ -31,6 +31,7 @@ function addRating(event, userId, recipeId) {
         text = document.getElementById("warningText");
         text.innerHTML = "You have to log in to add a rating to this recipe.";
         alerta.style.display = "block";
+        alerta.scrollIntoView();
     }
 }
 
@@ -135,5 +136,6 @@ function favouriteClicked(event,userId,recipeId) {
         text = document.getElementById("warningText");
         text.innerHTML = "You have to log in to add this recipe as your favourite.";
         alerta.style.display = "block";
+        alerta.scrollIntoView();
     }
 }

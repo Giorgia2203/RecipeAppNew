@@ -12,6 +12,7 @@ using RecipeModel.Models;
 using RecipeModel.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using RecipeMVC.Hubs;
 
 namespace RecipeMVC
 {
@@ -33,6 +34,7 @@ namespace RecipeMVC
             services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<RecipeContext>().AddDefaultTokenProviders();
             services.AddRazorPages();
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddSignalR();
             //services.AddScoped<SignInManager<AppUser>, SignInManager<AppUser>>();
 
         }
@@ -69,7 +71,9 @@ namespace RecipeMVC
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Recipes}/{action=IndexImage}/{id?}");
+                endpoints.MapHub<ChatHub>("/chathub");
                 endpoints.MapRazorPages();
+             
             });
         }
     }

@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewData["Title"] = "Chat";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <br />
+    <div class="row" style="align-items:center">
+        <div class="col">
+            <h3>Chat with others!</h3>
+        </div>
+        <div class="col">
+            <img src="~/Images/interview.png" style="float:right">
+        </div>
+    </div>
+    <hr />
+    <div class="container">
+        <br/>
+        <div class="row" style="align-items:center">
+            <div class="col-3" style="text-align:right; margin-left:50px"><h6>Enter your message here:</h6></div>
+            <div class="col-4"><input class="form-control ms-sm-2" type="text" id="messageInput" /></div>
+            <div class="col-4">
+                <input type="button" id="sendButton" value="Send Message" class="btn btn-outline-success"/>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <hr />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <ul id="messagesList">
+               <li>
+                    <div id="cardBoard" class="card border-secondary mb-3" style="max-width: 20rem;">
+                        <div class="card-header" id="header" style="font-weight:bold"></div>
+                        <div class="card-body">
+                            <p class="card-text" id="content"></p>
+                        </div>
+                    </div>
+                </li> 
+            </ul>
+        </div>
+    </div>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+</body>
+</html>

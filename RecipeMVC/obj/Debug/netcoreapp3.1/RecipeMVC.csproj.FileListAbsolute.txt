@@ -542,3 +542,5 @@ D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\D
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\RecipeIngredients\IngredientBrandEdit.cshtml.g.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Recipes\UserRecipeNotFound.cshtml.g.cs
 D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\FavouriteRecipes\FavouriteRecipeNotFound.cshtml.g.cs
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\bin\Debug\netcoreapp3.1\libman.json
+D:\Facultate\Master\An I\Medii avansate de programare\ProiectNou\RecipeMVC\obj\Debug\netcoreapp3.1\Razor\Views\Home\Chat.cshtml.g.cs
