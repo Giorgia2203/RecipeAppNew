@@ -170,7 +170,7 @@ namespace RecipeMVC.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexImage");
             }
 
             return View(recipe);
@@ -454,7 +454,7 @@ namespace RecipeMVC.Controllers
                 string ingredientJSON = await response.Content.ReadAsStringAsync();
                 ingredient = JsonConvert.DeserializeObject<Ingredient>(ingredientJSON);
             }
-   
+
             if (recipeIngredient == null)
             {
                 BrandIngredient brandIngredient = new BrandIngredient()

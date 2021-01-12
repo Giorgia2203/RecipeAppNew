@@ -69,21 +69,21 @@ namespace RecipeWebAPI.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(review).State = EntityState.Modified;
-
-            try
+            if (!ReviewExists(userId, recipeId))
             {
-                await _context.SaveChangesAsync();
+                await PostReview(review);
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                if (!ReviewExists(userId, recipeId))
+                _context.Entry(review).State = EntityState.Modified;
+
+                try
                 {
-                    return NotFound();
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException e)
                 {
-                    throw;
+                    throw e;
                 }
             }
 

@@ -3,7 +3,7 @@
 @using RecipeModel.Models
 
 @inject UserManager<AppUser> UserManager
-
+@inject SignInManager<AppUser> SignInManager
 @{
     ViewData["Title"] = "RecImgDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -28,17 +28,17 @@
             direction: rtl;
         }
 
-        .rating > span {
-            display: inline-block;
-            position: relative;
-            font-size: 24px;
-            color: #9dd1c2;
-        }
+            .rating > span {
+                display: inline-block;
+                position: relative;
+                font-size: 24px;
+                color: #9dd1c2;
+            }
 
-        .rating > span:hover:before,
-        .rating > span:hover ~ span:before {
-            color: #f3969a;
-        }
+                .rating > span:hover:before,
+                .rating > span:hover ~ span:before {
+                    color: #f3969a;
+                }
 
         .favourite {
             position: relative;
@@ -47,10 +47,9 @@
             float: right;
         }
 
-        .favourite:hover {
-            color: #e23232;
-        }
-
+            .favourite:hover {
+                color: #e23232;
+            }
     </style>
 </head>
 <body>
@@ -100,7 +99,10 @@
                 <div class="row">
                     <img width="35" height="35" src="~/Images/cooking.png" style="margin-left:10px" />
                     <p class="font-weight-bold" style="padding: 4px 0px 4px 4px">Author:</p>
-                    <a asp-controller="Home" asp-action="Chat"><p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.AppUser.Name)</p></a>
+                    @if (SignInManager.IsSignedIn(User))
+                    {<a asp-controller="Home" asp-action="Chat"><p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.AppUser.Name)</p></a>}
+                    else
+                    { <p style="padding: 4px 0px 4px 4px">@Html.DisplayFor(model => model.AppUser.Name)</p>}
                 </div>
                 <div class="row">
                     <img width="35" height="35" src="~/Images/schedule.png" style="margin-left:10px" />
